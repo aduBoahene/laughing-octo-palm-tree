@@ -30,7 +30,7 @@ jobs:
         npm run build
 
     - name: Create a new Netlify site
-      uses: netlify/actions/cli@v2.3.0
+      uses: netlify/actions/cli@master
       with:
         args: create --auth $NETLIFY_AUTH_TOKEN --new-site --dir=build
 
