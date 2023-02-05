@@ -29,12 +29,21 @@ jobs:
       run: |
         npm run build
 
+        
     - name: Create a new Netlify site
-      uses: netlify/actions/cli@master
+      uses: netlify/actions/cli@v2.3.0
       with:
-        args: create --auth $NETLIFY_AUTH_TOKEN --new-site --dir=build
+        args: create --new-site --dir=build --auth=$NETLIFY_AUTH_TOKEN
+      env:
+        NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+      id: create_site
+
 
     - name: Deploy to Netlify
-      uses: netlify/actions/cli@master
+      uses: netlify/actions/cli@v2.3.0
       with:
-        args: deploy --auth $NETLIFY_AUTH_TOKEN --site $NETLIFY_SITE_ID --dir=build
+        args: deploy --dir=build --prod --auth=$NETLIFY_AUTH_TOKEN --site=$NETLIFY_SITE_ID
+      env:
+        NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        NETLIFY_SITE_ID: ${{ steps.create_site.outputs.site_id }}
+
