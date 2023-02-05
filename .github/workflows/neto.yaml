@@ -1,13 +1,12 @@
 name: Deploy to Netlify
 
 on:
-  push:
-    branches:
-      - main
+
+  workflow_dispatch:
+
 
 env:
   NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-  NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
 
 jobs:
   deploy:
@@ -29,6 +28,11 @@ jobs:
     - name: Build the React app
       run: |
         npm run build
+
+    - name: Create a new Netlify site
+      uses: netlify/actions/cli@master
+      with:
+        args: create --auth $NETLIFY_AUTH_TOKEN --new-site --dir=build
 
     - name: Deploy to Netlify
       uses: netlify/actions/cli@master
